@@ -1,6 +1,5 @@
 package com.string.calculator;
 
-import com.string.calculator.calculate.OperationFactory;
 import com.string.calculator.collection.NumberCollection;
 import com.string.calculator.collection.OperatorCollection;
 import java.util.List;
@@ -14,10 +13,10 @@ public class Run {
   private final NumberCollection numberCollection = new NumberCollection();
   private final OperatorCollection operatorCollection = new OperatorCollection();
   private final NumberPiece numberPiece = new NumberPiece();
-  private final Calculate calculate;
+  private final Calculator calculator;
 
   public Run() {
-    this.calculate = new Calculate(new OperationFactory());
+    this.calculator = new Calculator();
   }
 
   public String calculate(String input) {
@@ -79,7 +78,8 @@ public class Run {
     String leftValue = numberCollection.getOne();
     String rightValue = numberCollection.getOne();
     OperatorSign operatorSign = operatorCollection.getOne();
-    String result = calculate.one(leftValue, rightValue, operatorSign);
+
+    String result = calculator.calculateOne(leftValue, rightValue, operatorSign);
     numberCollection.add(result);
   }
 
