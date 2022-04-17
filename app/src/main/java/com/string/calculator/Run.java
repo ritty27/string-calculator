@@ -13,6 +13,8 @@ public class Run {
   private final NumberCollection numberCollection = new NumberCollection();
   private final OperatorCollection operatorCollection = new OperatorCollection();
   private final NumberPiece numberPiece = new NumberPiece();
+
+  private final OperationSignChecker operationSignChecker = new OperationSignChecker();
   private final Calculator calculator;
 
   public Run() {
@@ -57,8 +59,8 @@ public class Run {
       addNumber();
     }
 
-    if (OperatorSign.isSupportedOperator(c)) {
-      operatorCollection.add(OperatorSign.valueOf(c));
+    if (operationSignChecker.isSupportedOperator(c)) {
+      operatorCollection.add(operationSignChecker.getOperator(c));
     }
 
     if (canAddNumberToCollection(c)) {
