@@ -17,6 +17,4 @@ public class PrimitiveOperation implements ArithmeticOperation {
     return Long.toString(Long.parseLong(leftValue) * Long.parseLong(rightValue));
   }
 
-  public PrimitiveOperation() {
-  }
 }

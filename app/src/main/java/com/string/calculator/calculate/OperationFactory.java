@@ -4,11 +4,14 @@ import static java.lang.Math.multiplyExact;
 
 public class OperationFactory {
 
+  private ArithmeticOperation  primitiveOperation = new PrimitiveOperation();
+  private ArithmeticOperation  bigIntegerOperation = new BigIntegerOperation();
+
   public ArithmeticOperation create(String leftValue, String rightValue) {
     if (isPrimitive(leftValue, rightValue)) {
-      return new PrimitiveOperation();
+      return primitiveOperation;
     }
-    return new BigIntegerOperation();
+    return bigIntegerOperation;
   }
 
   private boolean isPrimitive(String leftValue, String rightValue) {

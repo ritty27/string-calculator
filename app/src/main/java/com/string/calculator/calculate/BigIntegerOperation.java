@@ -4,7 +4,6 @@ import java.math.BigInteger;
 
 public class BigIntegerOperation implements ArithmeticOperation {
 
-
   @Override
   public String add(String leftValue, String rightValue) {
     BigInteger left = new BigInteger(leftValue);
@@ -26,6 +25,4 @@ public class BigIntegerOperation implements ArithmeticOperation {
     return left.multiply(right).toString();
   }
 
-  public BigIntegerOperation() {
-  }
 }
