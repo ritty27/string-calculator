@@ -13,27 +13,28 @@ class BigIntegerCalculateTests {
 
   @BeforeEach
   void init() {
-    calculate = new BigIntegerOperation("489376583975638392234277384",
-        "487394572398457329457489537129380123");
+    calculate = new BigIntegerOperation();
   }
 
   @Test
   @DisplayName("덧셈")
   void addTest() {
-    assertEquals(calculate.add(), "487394572887833913433127929363657507");
+    assertEquals(calculate.add("489376583975638392234277384", "487394572398457329457489537129380123"),
+      "487394572887833913433127929363657507");
   }
 
   @Test
   @DisplayName("뺄셈")
   void subtractTest() {
-    assertEquals(calculate.subtract(), "-487394571909080745481851144895102739");
+    assertEquals(calculate.subtract("489376583975638392234277384", "487394572398457329457489537129380123"),
+      "-487394571909080745481851144895102739");
   }
 
   @Test
   @DisplayName("곱셈")
   void multiplyTest() {
-    assertEquals(calculate.multiply(),
-        "238519490888624019359755491028456186644519216126524260758038232");
+    assertEquals(calculate.multiply("489376583975638392234277384", "487394572398457329457489537129380123"),
+      "238519490888624019359755491028456186644519216126524260758038232");
   }
 
 }

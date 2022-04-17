@@ -6,9 +6,9 @@ public class OperationFactory {
 
   public ArithmeticOperation create(String leftValue, String rightValue) {
     if (isPrimitive(leftValue, rightValue)) {
-      return new PrimitiveOperation(leftValue, rightValue);
+      return new PrimitiveOperation();
     }
-    return new BigIntegerOperation(leftValue, rightValue);
+    return new BigIntegerOperation();
   }
 
   private boolean isPrimitive(String leftValue, String rightValue) {

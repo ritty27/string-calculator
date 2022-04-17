@@ -4,18 +4,18 @@ import com.string.calculator.OperatorSign;
 
 public interface ArithmeticOperation {
 
-  String add();
+  String add(String leftValue, String rightValue);
 
-  String subtract();
+  String subtract(String leftValue, String rightValue);
 
-  String multiply();
+  String multiply(String leftValue, String rightValue);
 
-  default String calculateOne(OperatorSign operator) {
+  default String calculateOne(String leftValue, String rightValue, OperatorSign operator) {
     String result = null;
     switch (operator) {
-      case plus -> result = add();
-      case subtract -> result = subtract();
-      case multiply -> result = multiply();
+      case plus -> result = add(leftValue, rightValue);
+      case subtract -> result = subtract(leftValue, rightValue);
+      case multiply -> result = multiply(leftValue, rightValue);
     }
     return result;
   }
