@@ -12,7 +12,7 @@ public class Calculator {
     // 객체 생성을 동적으로 해야하는 경우
     ArithmeticOperation operation = operationFactory.create(leftValue, rightValue);
 
-    return operation.calculateOne(leftValue, rightValue, operatorSign);
+    return operation.calculateOne(operatorSign);
   }
 
 }
