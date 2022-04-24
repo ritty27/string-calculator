@@ -9,12 +9,13 @@ import java.util.Stack;
  */
 public class Run {
 
+  //상태
   private Stack<String> numberStack = new Stack<>();
   private Stack<OperatorSign> operatorSignStack = new Stack<>();
 
   private final NumberPiece numberPiece = new NumberPiece();
 
-  private final StackReverser stackReverser = new StackReverser();
+  //행위
   private final OperationSignChecker operationSignChecker = new OperationSignChecker();
   private final Calculator calculator;
 
@@ -31,7 +32,7 @@ public class Run {
       execute(c);
     }
     checkLast();
-    return getResult();
+    return calculator.calculateAll(numberStack, operatorSignStack);
   }
 
   private void checkLast() {
@@ -40,24 +41,14 @@ public class Run {
     }
 
     if (existHighOperatorSign()) {
-      addNumber();
+      numberStack.add(calculator.calculateOne(numberStack.pop(), numberStack.pop(), operatorSignStack.pop()));
     }
   }
 
-  private String getResult() {
-    numberStack = stackReverser.reverseStack(numberStack);
-    operatorSignStack = stackReverser.reverseStack(operatorSignStack);
-
-    while (numberStack.size() > 1) {
-      addNumber();
-    }
-
-    return numberStack.pop();
-  }
 
   private void execute(Character c) {
     if (existHighOperatorSign()) {
-      addNumber();
+      numberStack.add(calculator.calculateOne(numberStack.pop(), numberStack.pop(), operatorSignStack.pop()));
     }
 
     if (operationSignChecker.isSupportedOperator(c)) {
