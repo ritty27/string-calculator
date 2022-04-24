@@ -1,8 +1,7 @@
 package com.string.calculator;
 
-import com.string.calculator.collection.NumberCollection;
-import com.string.calculator.collection.OperatorCollection;
 import java.util.List;
+import java.util.Stack;
 
 /**
  * 얘는 딱 인풋을 받으면 숫자들은 숫자 스택에, 연산자는 연산자스택에 넣어주는 역할만 하고싶은데 <-- 이것도 책임이 많은편인건가 내가 설계한 계산기 특성상 높은 우선순위의
@@ -10,10 +9,12 @@ import java.util.List;
  */
 public class Run {
 
-  private final NumberCollection numberCollection = new NumberCollection();
-  private final OperatorCollection operatorCollection = new OperatorCollection();
+  private Stack<String> numberStack = new Stack<>();
+  private Stack<OperatorSign> operatorSignStack = new Stack<>();
+
   private final NumberPiece numberPiece = new NumberPiece();
 
+  private final StackReverser stackReverser = new StackReverser();
   private final OperationSignChecker operationSignChecker = new OperationSignChecker();
   private final Calculator calculator;
 
@@ -23,8 +24,8 @@ public class Run {
 
   public String calculate(String input) {
     List<Character> chars = input.chars()
-        .mapToObj(c -> (char) c)
-        .toList();
+      .mapToObj(c -> (char) c)
+      .toList();
 
     for (Character c : chars) {
       execute(c);
@@ -35,7 +36,7 @@ public class Run {
 
   private void checkLast() {
     if (numberPiece.hasNumber()) {
-      numberCollection.add(numberPiece.getNumber());
+      numberStack.add(numberPiece.getNumber());
     }
 
     if (existHighOperatorSign()) {
@@ -44,14 +45,14 @@ public class Run {
   }
 
   private String getResult() {
-    numberCollection.reverse();
-    operatorCollection.reverse();
+    numberStack = stackReverser.reverseStack(numberStack);
+    operatorSignStack = stackReverser.reverseStack(operatorSignStack);
 
-    while (numberCollection.size() > 1) {
+    while (numberStack.size() > 1) {
       addNumber();
     }
 
-    return numberCollection.getOne();
+    return numberStack.pop();
   }
 
   private void execute(Character c) {
@@ -60,11 +61,11 @@ public class Run {
     }
 
     if (operationSignChecker.isSupportedOperator(c)) {
-      operatorCollection.add(operationSignChecker.getOperator(c));
+      operatorSignStack.add(operationSignChecker.getOperator(c));
     }
 
     if (canAddNumberToCollection(c)) {
-      numberCollection.add(numberPiece.getNumber());
+      numberStack.add(numberPiece.getNumber());
     }
 
     if (isNumberPiece(c)) {
@@ -77,25 +78,25 @@ public class Run {
   }
 
   private void addNumber() {
-    String leftValue = numberCollection.getOne();
-    String rightValue = numberCollection.getOne();
-    OperatorSign operatorSign = operatorCollection.getOne();
+    String leftValue = numberStack.pop();
+    String rightValue = numberStack.pop();
+    OperatorSign operatorSign = operatorSignStack.pop();
 
     String result = calculator.calculateOne(leftValue, rightValue, operatorSign);
-    numberCollection.add(result);
+    numberStack.add(result);
   }
 
   private boolean existHighOperatorSign() {
-    if (operatorCollection.isEmpty()) {
+    if (operatorSignStack.isEmpty()) {
       return false;
     }
 
     // 빠져야 하는 코드인데 현재 코드를 고치면 안됨...
-    if (operatorCollection.size() >= numberCollection.size()) {
+    if (operatorSignStack.size() >= numberStack.size()) {
       return false;
     }
 
-    OperatorSign lastOperator = operatorCollection.peek();
+    OperatorSign lastOperator = operatorSignStack.peek();
     return lastOperator == OperatorSign.divide || lastOperator == OperatorSign.multiply;
   }
 
