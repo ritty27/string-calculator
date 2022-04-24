@@ -9,91 +9,17 @@ import java.util.Stack;
  */
 public class Run {
 
-  //상태
-  private Stack<String> numberStack = new Stack<>();
-  private Stack<OperatorSign> operatorSignStack = new Stack<>();
-
-  private final NumberPiece numberPiece = new NumberPiece();
-
   //행위
-  private final OperationSignChecker operationSignChecker = new OperationSignChecker();
-  private final Calculator calculator;
-
-  public Run() {
-    this.calculator = new Calculator();
-  }
+  private final InputConvertor inputConvertor = new InputConvertor();
+  private final Calculator calculator = new Calculator();
 
   public String calculate(String input) {
-    List<Character> chars = input.chars()
-      .mapToObj(c -> (char) c)
-      .toList();
+    StackPair stackPair = inputConvertor.toStack(input);
 
-    for (Character c : chars) {
-      execute(c);
-    }
-    checkLast();
+    Stack<String> numberStack = stackPair.numberStack();
+    Stack<OperatorSign> operatorSignStack = stackPair.operatorSignStack();
+
     return calculator.calculateAll(numberStack, operatorSignStack);
   }
-
-  private void checkLast() {
-    if (numberPiece.hasNumber()) {
-      numberStack.add(numberPiece.getNumber());
-    }
-
-    if (existHighOperatorSign()) {
-      numberStack.add(calculator.calculateOne(numberStack.pop(), numberStack.pop(), operatorSignStack.pop()));
-    }
-  }
-
-
-  private void execute(Character c) {
-    if (existHighOperatorSign()) {
-      numberStack.add(calculator.calculateOne(numberStack.pop(), numberStack.pop(), operatorSignStack.pop()));
-    }
-
-    if (operationSignChecker.isSupportedOperator(c)) {
-      operatorSignStack.add(operationSignChecker.getOperator(c));
-    }
-
-    if (canAddNumberToCollection(c)) {
-      numberStack.add(numberPiece.getNumber());
-    }
-
-    if (isNumberPiece(c)) {
-      numberPiece.add(c);
-    }
-  }
-
-  private boolean isNumberPiece(Character c) {
-    return c >= '0' && c <= '9';
-  }
-
-  private void addNumber() {
-    String leftValue = numberStack.pop();
-    String rightValue = numberStack.pop();
-    OperatorSign operatorSign = operatorSignStack.pop();
-
-    String result = calculator.calculateOne(leftValue, rightValue, operatorSign);
-    numberStack.add(result);
-  }
-
-  private boolean existHighOperatorSign() {
-    if (operatorSignStack.isEmpty()) {
-      return false;
-    }
-
-    // 빠져야 하는 코드인데 현재 코드를 고치면 안됨...
-    if (operatorSignStack.size() >= numberStack.size()) {
-      return false;
-    }
-
-    OperatorSign lastOperator = operatorSignStack.peek();
-    return lastOperator == OperatorSign.divide || lastOperator == OperatorSign.multiply;
-  }
-
-  private boolean canAddNumberToCollection(char c) {
-    return c == ' ' && numberPiece.hasNumber();
-  }
-
 
 }

@@ -18,9 +18,5 @@ public class NumberPiece {
     return !stringBuilder.isEmpty();
   }
 
-  public int size() {
-    return stringBuilder.length();
-  }
-
 
 }
